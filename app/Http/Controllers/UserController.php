@@ -9,6 +9,8 @@ use App\User;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
+use App\Http\Requests\StoreUserRequest;
+
 class UserController extends Controller {
 
 	use ResetsPasswords;
@@ -67,34 +69,16 @@ class UserController extends Controller {
 		}
 	}
 
-	public function postRegister( )
+	public function postRegister(StoreUserRequest $request)
 	{
-		$data = \Input::except( '_tone' );
+		# $request validated in Request validator 
 		
-		$validator = \Validator::make($data, User::$rules_new);
-		
-		if ($validator->passes())
-		{
-			Messages::set([ 
-				'success' => \Lang::get('messages.register_successful') 
-			]);
-
-			User::create( [
-				'name'      => $data['name'],
-				'email'     => $data['email'],
-				'password'  => \Hash::make($data['password']),
-				'phone'     => $data['phone'],
-			]);
-
-			return \Redirect::to( '/' );
-		}
-		else
-		{
-			Messages::set( $validator, TRUE );
-			
-			return \Redirect::back()
-				->withInput($data);
-		}
+		User::create( [
+			'name'      => $request->get('first_name'). ' '.$request->get('last_name'),
+			'email'     => $request->get('email'),
+			'password'  => \Hash::make($request->get('password')),
+			'phone'     => $request->get('phone'),
+		]);
 	}
 
 }

@@ -12,4 +12,18 @@ class WelcomeController extends Controller {
 		return view('welcome');
 	}
 
+	public function prizes()
+	{
+		return view('pages.prizes');
+	}
+
+	public function winners()
+	{
+		return view('pages.prizes');
+	}
+
+	public function terms()
+	{
+		return view('pages.terms');
+	}
 }
